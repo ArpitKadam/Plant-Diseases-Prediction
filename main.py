@@ -30,7 +30,8 @@ st.sidebar.title(get_text('sidebar_title'))
 languages = {
     'English': 'en',
     'हिंदी': 'hi',
-    'Español': 'es'
+    'Español': 'es',
+    'मराठी': 'mr'
 }
 selected_language = st.sidebar.selectbox("🌐 Language/भाषा/Idioma", options=list(languages.keys()))
 st.session_state.language = languages[selected_language]
