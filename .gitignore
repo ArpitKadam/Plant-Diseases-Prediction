@@ -2,3 +2,4 @@ New Plant Diseases Dataset(Augmented)/
 test/
 venv/
 __pycache__/
+.env
