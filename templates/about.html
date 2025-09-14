@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Enhanced hero section with gradient background and improved typography -->
+<div class="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-emerald-950 dark:via-green-950 dark:to-teal-950 py-16 mb-12">
+    <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+    <div class="relative max-w-4xl mx-auto text-center px-6">
+        <h1 class="text-5xl font-bold bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent mb-6">
+            {{ get_text('about') }}
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Empowering farmers with AI-driven plant disease detection for healthier crops and sustainable agriculture
+        </p>
+    </div>
+</div>
+
+<div class="max-w-6xl mx-auto px-6 space-y-12">
+    <!-- Enhanced team image section with better styling -->
+    <div class="text-center mb-16">
+        <div class="relative inline-block">
+            <img src="static/team.png" alt="Our Team" class="w-full max-w-4xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 transition-transform duration-300 hover:scale-105">
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+    </div>
+
+    <!-- Enhanced mission section with better visual hierarchy -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-2xl">🎯</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ get_text('about_mission_title').replace('## 🎯 ', '') }}</h2>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">{{ get_text('about_mission_text') }}</p>
+    </div>
+
+    <!-- Enhanced importance section -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-2xl">🌾</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ get_text('about_importance_title').replace('## 🌾 ', '') }}</h2>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">{{ get_text('about_importance_text') }}</p>
+    </div>
+
+    <!-- Enhanced dataset section -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-2xl">📊</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ get_text('about_dataset_title').replace('## 📊 ', '') }}</h2>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">{{ get_text('about_dataset_text') }}</p>
+    </div>
+
+    <!-- Enhanced values and impact section with better grid layout -->
+    <div class="grid lg:grid-cols-2 gap-8">
+        <div class="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-2xl p-8 border border-emerald-200 dark:border-emerald-700">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mr-4">
+                    <span class="text-2xl">💎</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Our Values</h3>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                        <strong class="text-gray-900 dark:text-white">Innovation:</strong>
+                        <span class="text-gray-700 dark:text-gray-300"> Leveraging cutting-edge AI technology</span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-green-500 rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                        <strong class="text-gray-900 dark:text-white">Accessibility:</strong>
+                        <span class="text-gray-700 dark:text-gray-300"> Making advanced tools available to all farmers</span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-teal-500 rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                        <strong class="text-gray-900 dark:text-white">Accuracy:</strong>
+                        <span class="text-gray-700 dark:text-gray-300"> Ensuring reliable and precise predictions</span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-cyan-500 rounded-full mt-3 flex-shrink-0"></div>
+                    <div>
+                        <strong class="text-gray-900 dark:text-white">Sustainability:</strong>
+                        <span class="text-gray-700 dark:text-gray-300"> Supporting eco-friendly farming practices</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-2xl p-8 border border-teal-200 dark:border-teal-700">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4">
+                    <span class="text-2xl">🚀</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Our Impact</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl">
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">Accuracy Rate</span>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">95%+</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl">
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">Languages Supported</span>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">4</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl">
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">Disease Types</span>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">38+</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl">
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">Response Time</span>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">&lt;3s</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

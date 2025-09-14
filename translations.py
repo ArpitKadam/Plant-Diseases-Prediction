@@ -5,6 +5,7 @@ TRANSLATIONS = {
         'home': "Home",
         'about': "About",
         'diseases_prediction': "Diseases Prediction",
+        'analysis': "Analysis",
         'toggle_dark_mode': "Toggle Dark Mode",
         'main_header': "PLANT DISEASES RECOGNITION SYSTEM",
         'welcome_header': "🌿 Welcome to Our Plant Diseases Recognition System! 🌿",
@@ -78,6 +79,7 @@ This plant disease recognition system is built on a robust dataset originally so
         'home': "होम",
         'about': "हमारे बारे में",
         'diseases_prediction': "रोग पहचान",
+        "analysis": "विश्लेषण",
         'toggle_dark_mode': "थीम बदलें",
         'main_header': "पौधों की बीमारियों की पहचान प्रणाली",
         'welcome_header': "🌿 हमारी पौधों की बीमारियों की पहचान प्रणाली में आपका स्वागत है! 🌿",
@@ -151,6 +153,7 @@ This plant disease recognition system is built on a robust dataset originally so
         'home': "Inicio",
         'about': "Acerca de",
         'diseases_prediction': "Predicción de Enfermedades",
+        'analysis': "Análisis",
         'toggle_dark_mode': "Cambiar Modo Oscuro",
         'main_header': "SISTEMA DE RECONOCIMIENTO DE ENFERMEDADES DE PLANTAS",
         'welcome_header': "🌿 ¡Bienvenido a Nuestro Sistema de Reconocimiento de Enfermedades de Plantas! 🌿",
@@ -224,6 +227,7 @@ Este sistema de reconocimiento de enfermedades de plantas está construido sobre
         'home': "मुख्यपृष्ठ",
         'about': "आमच्याबद्दल",
         'diseases_prediction': "रोग ओळख",
+        'analysis': "विश्लेषण",
         'toggle_dark_mode': "थीम बदला",
         'main_header': "वनस्पती रोग ओळख प्रणाली",
         'welcome_header': "🌿 आमच्या वनस्पती रोग ओळख प्रणालीमध्ये आपले स्वागत आहे! 🌿",
@@ -290,5 +294,6 @@ Este sistema de reconocimiento de enfermedades de plantas está construido sobre
         """,
         'need_help_title': "📞 मदत हवी आहे?",
         'need_help_text': "जर तुम्हाला काही प्रश्न असतील किंवा सिस्टमबद्दल अधिक जाणून घ्यायचे असेल, तर आमच्याशी संपर्क साधण्यास संकोच करू नका."
-    }
-} 
+    },
+
+}

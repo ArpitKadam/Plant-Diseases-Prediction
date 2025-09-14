@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Plant Disease Detection{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: 'var(--background)',
+                        foreground: 'var(--foreground)',
+                        card: 'var(--card)',
+                        'card-foreground': 'var(--card-foreground)',
+                        primary: 'var(--primary)',
+                        'primary-foreground': 'var(--primary-foreground)',
+                        secondary: 'var(--secondary)',
+                        'secondary-foreground': 'var(--secondary-foreground)',
+                        muted: 'var(--muted)',
+                        'muted-foreground': 'var(--muted-foreground)',
+                        accent: 'var(--accent)',
+                        'accent-foreground': 'var(--accent-foreground)',
+                        border: 'var(--border)',
+                        input: 'var(--input)',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'display': ['Manrope', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'bounce-gentle': 'bounceGentle 2s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            /* Updated color palette based on design brief for better light mode visibility */
+            --background: #ffffff;
+            --foreground: #1f2937;
+            --card: #f0fdf4;
+            --card-foreground: #1f2937;
+            --primary: #15803d;
+            --primary-foreground: #ffffff;
+            --secondary: #84cc16;
+            --secondary-foreground: #1f2937;
+            --muted: #f9fafb;
+            --muted-foreground: #6b7280;
+            --accent: #84cc16;
+            --accent-foreground: #1f2937;
+            --border: #d1d5db;
+            --input: #f9fafb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #dc2626;
+        }
+        .dark {
+            /* Enhanced dark mode colors for better contrast */
+            --background: #0f172a;
+            --foreground: #f1f5f9;
+            --card: #1e293b;
+            --card-foreground: #f1f5f9;
+            --primary: #22c55e;
+            --primary-foreground: #0f172a;
+            --secondary: #84cc16;
+            --secondary-foreground: #0f172a;
+            --muted: #334155;
+            --muted-foreground: #94a3b8;
+            --accent: #84cc16;
+            --accent-foreground: #0f172a;
+            --border: #475569;
+            --input: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #dc2626;
+        }
+
+        /* Added custom animations for better user experience */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes bounceGentle {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Enhanced component styling */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-full bg-background text-foreground font-sans">
+    <!-- Navigation -->
+    <!-- Enhanced navigation with better styling and animations -->
+    <nav class="bg-card/80 backdrop-blur-md border-b border-border sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">🌱</span>
+                        </div>
+                        <h1 class="text-xl font-display font-bold text-card-foreground">{{ get_text('sidebar_title') }}</h1>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{{ url_for('home') }}" class="text-card-foreground hover:text-primary transition-all duration-200 font-medium relative group">
+                        {{ get_text('home') }}
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
+                    </a>
+                    <a href="{{ url_for('about') }}" class="text-card-foreground hover:text-primary transition-all duration-200 font-medium relative group">
+                        {{ get_text('about') }}
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
+                    </a>
+                    <a href="{{ url_for('predict_page') }}" class="text-card-foreground hover:text-primary transition-all duration-200 font-medium relative group">
+                        {{ get_text('diseases_prediction') }}
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
+                    </a>
+                    <a href="{{ url_for('analysis') }}" class="text-card-foreground hover:text-primary transition-all duration-200 font-medium relative group">
+                        {{ get_text('analysis') }}
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
+                    </a>
+                </div>
+                
+                <!-- Language Selector & Dark Mode -->
+                <div class="flex items-center space-x-4">
+                    <select onchange="changeLanguage(this.value)" class="bg-input border border-border rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
+                        <option value="en" {% if language == 'en' %}selected{% endif %}>English</option>
+                        <option value="hi" {% if language == 'hi' %}selected{% endif %}>हिंदी</option>
+                        <option value="es" {% if language == 'es' %}selected{% endif %}>Español</option>
+                        <option value="mr" {% if language == 'mr' %}selected{% endif %}>मराठी</option>
+                    </select>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-secondary/10 text-secondary hover:bg-secondary hover:text-secondary-foreground transition-all duration-200 hover:scale-105">
+                        <span id="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="md:hidden border-t border-border bg-card/95 backdrop-blur-sm">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{{ url_for('home') }}" class="block px-3 py-2 text-card-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-200">{{ get_text('home') }}</a>
+                <a href="{{ url_for('about') }}" class="block px-3 py-2 text-card-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-200">{{ get_text('about') }}</a>
+                <a href="{{ url_for('predict_page') }}" class="block px-3 py-2 text-card-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-200">{{ get_text('diseases_prediction') }}</a>
+                <a href="{{ url_for('analysis') }}" class="block px-3 py-2 text-card-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-200">{{ get_text('analysis') }}</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Enhanced JavaScript with better theme handling -->
+    <script>
+        function changeLanguage(language) {
+            window.location.href = `/set_language/${language}`;
+        }
+        
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            
+            // Update theme icon
+            const themeIcon = document.getElementById('theme-icon');
+            themeIcon.textContent = isDark ? '☀️' : '🌙';
+        }
+        
+        // Load dark mode preference and set initial icon
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        // Set initial theme icon
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeIcon = document.getElementById('theme-icon');
+            themeIcon.textContent = isDarkMode ? '☀️' : '🌙';
+        });
+    </script>
+</body>
+</html>

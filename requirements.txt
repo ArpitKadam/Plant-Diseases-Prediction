@@ -1,4 +1,4 @@
-tensorflow
+tensorflow==2.19.0
 scikit-learn
 numpy
 pandas
@@ -9,3 +9,7 @@ matplotlib
 opencv-python
 altair
 openai
+Werkzeug
+Flask
+python-dotenv
+markdown

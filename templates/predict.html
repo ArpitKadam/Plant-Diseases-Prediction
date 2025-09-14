@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-emerald-900">
+    <div class="max-w-6xl mx-auto px-4 py-12 space-y-12">
+        <!-- Hero Section -->
+        <div class="text-center space-y-6">
+            <div class="inline-flex items-center gap-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-6 py-3 rounded-full border border-emerald-200 dark:border-emerald-700">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span class="text-emerald-700 dark:text-emerald-300 font-medium">AI-Powered Disease Detection</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 bg-clip-text text-transparent leading-tight">
+                {{ get_text('diseases_prediction') }}
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Upload an image of your plant to get instant disease detection and expert treatment recommendations powered by advanced AI
+            </p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/20 dark:border-gray-700/30 shadow-2xl hover:shadow-3xl transition-all duration-500">
+            <form id="uploadForm" enctype="multipart/form-data" class="space-y-8">
+                <!-- File Upload -->
+                <div class="space-y-4">
+                    <label class="block text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        {{ get_text('upload_image') }}
+                    </label>
+                    <div class="relative group">
+                        <div class="border-3 border-dashed border-emerald-300 dark:border-emerald-600 rounded-2xl p-12 text-center hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 bg-gradient-to-br from-emerald-50/50 to-teal-50/50 dark:from-emerald-900/20 dark:to-teal-900/20 group-hover:from-emerald-100/70 group-hover:to-teal-100/70 dark:group-hover:from-emerald-800/30 dark:group-hover:to-teal-800/30">
+                            <input type="file" id="imageFile" accept=".jpg,.jpeg,.png" class="hidden">
+                            <div id="uploadArea" onclick="document.getElementById('imageFile').click()" class="cursor-pointer">
+                                <div class="text-6xl mb-6 transform group-hover:scale-110 transition-transform duration-300">🌿</div>
+                                <p class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Click to upload plant image</p>
+                                <p class="text-gray-600 dark:text-gray-400">Supports JPG, JPEG, PNG files up to 10MB</p>
+                                <div class="mt-6 inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-800 px-4 py-2 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-medium">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    Drag & drop or click to browse
+                                </div>
+                            </div>
+                            <div id="imagePreview" class="hidden mt-8">
+                                <div class="relative inline-block">
+                                    <img id="previewImg" class="max-w-full h-80 object-contain mx-auto rounded-xl shadow-lg border-4 border-white dark:border-gray-700">
+                                    <div class="absolute -top-2 -right-2 bg-emerald-500 text-white rounded-full p-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <p id="fileName" class="text-sm text-gray-600 dark:text-gray-400 mt-4 font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="predictBtn" disabled 
+                        class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-4 px-8 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg">
+                    <span class="flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        {{ get_text('predict_button') }}
+                    </span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden">
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl p-12 text-center border border-white/20 dark:border-gray-700/30 shadow-2xl">
+                <div class="relative">
+                    <div class="animate-spin w-16 h-16 border-4 border-emerald-200 dark:border-emerald-700 border-t-emerald-600 dark:border-t-emerald-400 rounded-full mx-auto mb-6"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-8 h-8 bg-emerald-100 dark:bg-emerald-800 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                <p class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">{{ get_text('predicting') }}</p>
+                <p class="text-gray-600 dark:text-gray-400">Our AI is analyzing your plant image...</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden space-y-8">
+            <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/20 dark:border-gray-700/30 shadow-2xl">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                        Prediction Results
+                    </h2>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="relative group">
+                            <img id="resultImage" class="w-full rounded-2xl shadow-xl border-4 border-white dark:border-gray-700 group-hover:shadow-2xl transition-shadow duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-2xl p-6 border border-emerald-200 dark:border-emerald-700">
+                            <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                                Detected Disease:
+                            </h3>
+                            <p id="diseaseName" class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent"></p>
+                        </div>
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl p-6 border border-blue-200 dark:border-blue-700">
+                            <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                Confidence Level:
+                            </h3>
+                            <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-6 overflow-hidden mb-3">
+                                <div id="confidenceBar" class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-1000 ease-out rounded-full"></div>
+                            </div>
+                            <p id="confidenceText" class="text-lg font-semibold text-gray-700 dark:text-gray-300"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remedies Section -->
+            <div id="remediesSection" class="hidden">
+                <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/20 dark:border-gray-700/30 shadow-2xl">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                            Treatment Recommendations
+                        </h3>
+                    </div>
+                    <div id="remedyContent" class="prose prose-lg max-w-none text-gray-700 dark:text-gray-300 prose-headings:text-gray-800 dark:prose-headings:text-gray-200 prose-strong:text-gray-800 dark:prose-strong:text-gray-200 prose-table:text-gray-700 dark:prose-table:text-gray-300 prose-th:border-gray-300 dark:prose-th:border-gray-600 prose-td:border-gray-200 dark:prose-td:border-gray-700 prose-th:bg-gray-50 dark:prose-th:bg-gray-800 prose-tr:hover:bg-gray-50 dark:prose-tr:hover:bg-gray-800/50"></div>
+                </div>
+            </div>
+
+            <!-- Error Section -->
+            <div id="remedyError" class="hidden">
+                <div class="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-700 rounded-2xl p-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-red-100 dark:bg-red-800 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-red-800 dark:text-red-200 font-medium">Failed to get remedy recommendations. Please check your API key configuration.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/20 dark:border-gray-700/30 shadow-2xl">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">
+                    How It Works
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300">Advanced AI technology in 4 simple steps</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">1. Upload Image</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Select a clear photo of the affected plant area</p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">2. AI Analysis</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Our CNN model analyzes the image patterns</p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">3. Get Results</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Receive instant disease prediction with confidence</p>
+                </div>
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-3">4. Treatment Advice</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Get AI-powered remedy recommendations</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-3xl p-8 md:p-12 border border-amber-200 dark:border-amber-700 shadow-xl">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                    Tips for Best Results
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl">
+                        <div class="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-200 font-medium">Use clear, well-lit images</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl">
+                        <div class="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-200 font-medium">Focus on the affected area</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl">
+                        <div class="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-200 font-medium">Avoid blurry or dark photos</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl">
+                        <div class="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-200 font-medium">Include leaves showing symptoms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('imageFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('imagePreview').classList.remove('hidden');
+            document.getElementById('predictBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('imageFile');
+    
+    if (!fileInput.files[0]) {
+        alert('Please select an image file');
+        return;
+    }
+    
+    // Show loading state
+    document.getElementById('loadingState').classList.remove('hidden');
+    document.getElementById('resultsSection').classList.add('hidden');
+    
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        // Hide loading state
+        document.getElementById('loadingState').classList.add('hidden');
+        
+        if (result.success) {
+            // Show results
+            document.getElementById('resultImage').src = 'data:image/jpeg;base64,' + result.image;
+            document.getElementById('diseaseName').textContent = result.disease.replace(/_/g, ' ');
+            
+            const confidence = Math.round(result.confidence * 100);
+            document.getElementById('confidenceBar').style.width = confidence + '%';
+            document.getElementById('confidenceText').textContent = confidence + '% confidence';
+            
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            // Show remedies if available
+            if (result.remedy) {
+                document.getElementById('remedyContent').innerHTML = result.remedy;
+                document.getElementById('remediesSection').classList.remove('hidden');
+            } else if (result.remedy_error) {
+                document.getElementById('remedyError').classList.remove('hidden');
+            }
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        document.getElementById('loadingState').classList.add('hidden');
+        alert('Error: ' + error.message);
+    }
+});
+</script>
+{% endblock %}

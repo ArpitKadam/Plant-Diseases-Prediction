@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Enhanced hero section with gradient background -->
+<div class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950 dark:via-indigo-950 dark:to-purple-950 py-16 mb-12">
+    <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+    <div class="relative max-w-6xl mx-auto text-center px-6">
+        <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
+            {{ get_text('analysis') }}
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Comprehensive model training analysis and performance metrics for our AI-powered plant disease detection system
+        </p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-6 space-y-12">
+    <!-- Enhanced training charts section with better styling -->
+    <div class="grid lg:grid-cols-2 gap-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-4">
+                    <span class="text-white text-lg">📈</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Training Accuracy vs Epochs</h3>
+            </div>
+            <div class="relative group">
+                {% if chart_files.epochs_training_accuracy %}
+                    <img src="{{ url_for('training_charts', filename='Epochs vs. Training Accuracy.JPG') }}" alt="Training Accuracy" class="w-full rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                {% else %}
+                    <img src="/placeholder.svg?height=300&width=400" alt="Training Accuracy" class="w-full rounded-xl shadow-md">
+                {% endif %}
+                <div class="absolute inset-0 rounded-xl bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mr-4">
+                    <span class="text-white text-lg">📊</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Validation Accuracy vs Epochs</h3>
+            </div>
+            <div class="relative group">
+                {% if chart_files.validation_accuracy %}
+                    <img src="{{ url_for('training_charts', filename='Validation Accuracy vs. No. of Epochs.JPG') }}" alt="Validation Accuracy" class="w-full rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                {% else %}
+                    <img src="/placeholder.svg?height=300&width=400" alt="Validation Accuracy" class="w-full rounded-xl shadow-md">
+                {% endif %}
+                <div class="absolute inset-0 rounded-xl bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced comparison chart section -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white text-xl">📋</span>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Training vs Validation Accuracy</h3>
+        </div>
+        <div class="relative group">
+            {% if chart_files.training_validation_accuracy %}
+                <img src="{{ url_for('training_charts', filename='Training Accuracy and Validation Accuracy vs. No. of Epochs.JPG') }}" alt="Training vs Validation" class="w-full rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
+            {% else %}
+                <img src="/placeholder.svg?height=400&width=800" alt="Training vs Validation" class="w-full rounded-xl shadow-md">
+            {% endif %}
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Enhanced model specifications section -->
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white text-xl">⚙️</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Model Specifications</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for key, value in specs.items() %}
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="font-bold text-gray-900 dark:text-white mb-3 text-lg">{{ key.replace('_', ' ').title() }}</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">{{ value }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Enhanced performance metrics section with better visual design -->
+    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl p-8 border border-emerald-200 dark:border-emerald-700">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-white text-xl">🎯</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Performance Metrics</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="text-center bg-white/70 dark:bg-gray-800/70 p-6 rounded-xl backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
+                <div class="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-3">95.2%</div>
+                <p class="text-gray-600 dark:text-gray-400 font-medium">Final Accuracy</p>
+            </div>
+            <div class="text-center bg-white/70 dark:bg-gray-800/70 p-6 rounded-xl backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
+                <div class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3">0.15</div>
+                <p class="text-gray-600 dark:text-gray-400 font-medium">Final Loss</p>
+            </div>
+            <div class="text-center bg-white/70 dark:bg-gray-800/70 p-6 rounded-xl backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
+                <div class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">38</div>
+                <p class="text-gray-600 dark:text-gray-400 font-medium">Disease Classes</p>
+            </div>
+            <div class="text-center bg-white/70 dark:bg-gray-800/70 p-6 rounded-xl backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
+                <div class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">128x128</div>
+                <p class="text-gray-600 dark:text-gray-400 font-medium">Input Size</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
