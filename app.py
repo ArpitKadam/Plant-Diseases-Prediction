@@ -15,7 +15,7 @@ import markdown
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Change this to a secure secret key
+app.secret_key = os.getenv('APP_SECRET_KEY')
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
@@ -26,7 +26,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Load class names
-with open(r"Training Specs\class_names.json", "r") as f:
+with open("Training Specs/class_names.json", "r") as f:
     CLASS_NAMES = json.load(f)
 
 # Load training specs
@@ -135,7 +135,14 @@ def upload_file():
                     }
                     lang_name = language_names.get(language, 'English')
                     
-                    prompt = f"Suggest effective remedies, treatments, and solutions for this plant disease: {disease.replace('_', ' ')}. Give simple and actionable advice for farmers in {lang_name}."
+                    prompt = (
+                                f"Act as an expert agricultural advisor. Provide clear, practical, and low-cost remedies, treatments, and "
+                                f"preventive measures for the plant disease: {disease.replace('_', ' ')}. "
+                                f"Explain the cause and symptoms briefly, then give step-by-step solutions using easily available materials "
+                                f"and farming practices. Ensure the advice is easy to understand and follow by local farmers, and write the response "
+                                f"in language {lang_name}."
+                             )
+
                     
                     llm = ChatGroq(api_key=groq_api_key, model="openai/gpt-oss-20b")
                     response = llm.invoke(prompt)
@@ -152,5 +159,6 @@ def upload_file():
     
     return jsonify({'error': 'Invalid file type'})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+

@@ -13,3 +13,5 @@ Werkzeug
 Flask
 python-dotenv
 markdown
+gunicorn
+langchain_groq
